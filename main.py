@@ -13,7 +13,7 @@ from datetime import datetime
 
 #Read in url-list
 try:
-  with open('url_list1.txt') as url_file:
+  with open('url_list.txt') as url_file:
     url_data = []
     url_data = [line.rstrip() for line in url_file]
 
@@ -22,8 +22,14 @@ try:
     print(i)
     url = i
 
-    #extract the palylist title (pos in url after 'de.'')
-    station = url.split('de.')[1]
+    #extract the playlist title (pos in url after 'us.'')
+    start = "us/" 
+    end = "/playlist"
+    idx1 = url.index(start) # getting index of substrings
+    idx2 = url.index(end)
+    station = ''
+    for idx in range(idx1 + len(start), idx2):
+      station = station + url[idx]
     print(station)
 
     #create empty data list
@@ -43,6 +49,8 @@ try:
     try:
       html = requests.get(url).text
       soup = BeautifulSoup(html, "html.parser")
+      #print(html)
+      #print(soup)
 
       #scrape the online playlist
       table = soup.find("table", attrs={"class": "tablelist-schedule"})
